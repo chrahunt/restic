@@ -686,6 +686,7 @@ func runBackup(opts BackupOptions, gopts GlobalOptions, term *termstatus.Termina
 		Time:           timeStamp,
 		Hostname:       opts.Host,
 		ParentSnapshot: *parentSnapshotID,
+		Paths:          targets,
 	}
 
 	if !gopts.JSON {
