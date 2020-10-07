@@ -92,6 +92,7 @@ type BackupOptions struct {
 	WithAtime               bool
 	IgnoreInode             bool
 	UseFsSnapshot           bool
+	SnapshotPaths           []string
 }
 
 var backupOptions BackupOptions
@@ -130,6 +131,8 @@ func init() {
 	if runtime.GOOS == "windows" {
 		f.BoolVar(&backupOptions.UseFsSnapshot, "use-fs-snapshot", false, "use filesystem snapshot where possible (currently only Windows VSS)")
 	}
+
+	f.StringArrayVar(&backupOptions.SnapshotPaths, "snapshot-path", nil, "set explicit paths in snapshot")
 }
 
 // filterExisting returns a slice of all existing items, or an error if no
@@ -680,13 +683,18 @@ func runBackup(opts BackupOptions, gopts GlobalOptions, term *termstatus.Termina
 		parentSnapshotID = &restic.ID{}
 	}
 
+	paths := targets
+	if opts.SnapshotPaths != nil {
+		paths = opts.SnapshotPaths
+	}
+
 	snapshotOpts := archiver.SnapshotOptions{
 		Excludes:       opts.Excludes,
 		Tags:           opts.Tags,
 		Time:           timeStamp,
 		Hostname:       opts.Host,
 		ParentSnapshot: *parentSnapshotID,
-		Paths:          targets,
+		Paths:          paths,
 	}
 
 	if !gopts.JSON {
