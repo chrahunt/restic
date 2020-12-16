@@ -289,7 +289,7 @@ The patterns are expanded, when the file is read, by the Go function
 `filepath.Glob <https://golang.org/pkg/path/filepath/#Glob>`__.
 
 The option ``--files-from-verbatim`` has the same behavior as ``--files-from``,
-except that it contains literal filenames. It does expand patterns; filenames
+except that it contains literal filenames. It does not expand patterns; filenames
 are listed verbatim.  Lines starting with a ``#`` are not ignored; leading and
 trailing whitespace is not trimmed off. Empty lines are still allowed, so that
 files can be grouped.
